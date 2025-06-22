@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPERIMENT_NAME - Animation Experiments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        #canvas-container {
+            width: 400px;
+            height: 900px;
+            position: relative;
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .slider-label {
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .speed-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 120px;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #7669DD;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .speed-slider::-webkit-slider-thumb:hover {
+            background: #8B7DE8;
+            transform: scale(1.1);
+        }
+        
+        .speed-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #7669DD;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        
+        .speed-slider::-moz-range-thumb:hover {
+            background: #8B7DE8;
+            transform: scale(1.1);
+        }
+        
+        .speed-value {
+            color: #7669DD;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        #back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        #back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        #experiment-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            font-size: 12px;
+            line-height: 1.4;
+            max-width: 200px;
+            z-index: 10;
+        }
+        
+        #experiment-info h3 {
+            margin-bottom: 8px;
+            color: #7669DD;
+            font-size: 14px;
+        }
+        
+        #experiment-info p {
+            color: #cccccc;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="../../index.html" id="back-button">← Back to Dashboard</a>
+    
+    <div id="experiment-info">
+        <h3>EXPERIMENT_NAME</h3>
+        <p><strong>Particles:</strong> X,XXX</p>
+        <p><strong>Duration:</strong> X minutes</p>
+        <p><strong>Effect:</strong> Description of effect</p>
+        <p><strong>Colors:</strong> Color scheme</p>
+    </div>
+    
+    <div id="canvas-container">
+        <canvas id="particle-canvas"></canvas>
+        <div id="controls">
+            <div class="slider-container">
+                <span class="slider-label">Duration</span>
+                <input type="range" class="speed-slider" id="speed-slider" min="10" max="480" step="10" value="60">
+                <span class="speed-value" id="speed-value">1:00</span>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/experiment-name.js"></script>
+</body>
+</html> 

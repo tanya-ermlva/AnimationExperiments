@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Experiments Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #7669DD, #7669DD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: #cccccc;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .experiments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .experiment-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .experiment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7669DD, #7669DD);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .experiment-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .experiment-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .experiment-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        
+        .experiment-card p {
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .experiment-preview {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .experiment-preview::after {
+            content: '▶';
+            font-size: 2rem;
+            color: #7669DD;
+            opacity: 0.7;
+        }
+        
+        .experiment-preview:hover::after {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .view-button {
+            background: linear-gradient(45deg, #7669DD, #7669DD);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .view-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(118, 105, 221, 0.3);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888888;
+        }
+        
+        @media (max-width: 768px) {
+            .experiments-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Animation Experiments</h1>
+            <p>Interactive visual experiments showcasing particle animations and dynamic effects. Each experiment demonstrates different techniques and visual approaches.</p>
+        </div>
+        
+        <div class="experiments-grid">
+            <div class="experiment-card" onclick="window.location.href='experiments/particle-sphere/index.html'">
+                <div class="experiment-preview"></div>
+                <h3>Particle Sphere Gathering</h3>
+                <p>3000 particles scatter randomly in 3D space and gradually gather into a rotating sphere. Features smooth color transitions from white to red to blue.</p>
+                <button class="view-button">View Experiment</button>
+            </div>
+            
+            <div class="experiment-card" onclick="window.location.href='experiments/wave-particles/index.html'">
+                <div class="experiment-preview"></div>
+                <h3>Wave Particle Field</h3>
+                <p>Particles flowing in wave patterns with dynamic amplitude and frequency controls. Creates mesmerizing flowing effects.</p>
+                <button class="view-button">View Experiment</button>
+            </div>
+            
+            <div class="experiment-card" onclick="window.location.href='experiments/nebula-cloud/index.html'">
+                <div class="experiment-preview"></div>
+                <h3>Nebula Cloud Formation</h3>
+                <p>Cosmic particles forming nebula-like structures with organic movement and color blending effects.</p>
+                <button class="view-button">View Experiment</button>
+            </div>
+            
+            <div class="experiment-card" onclick="window.location.href='experiments/geometric-patterns/index.html'">
+                <div class="experiment-preview"></div>
+                <h3>Geometric Pattern Evolution</h3>
+                <p>Particles forming and transitioning between various geometric patterns with mathematical precision.</p>
+                <button class="view-button">View Experiment</button>
+            </div>
+            
+            <div class="experiment-card" onclick="window.location.href='experiments/energy-flow/index.html'">
+                <div class="experiment-preview"></div>
+                <h3>Energy Flow Streams</h3>
+                <p>Dynamic energy streams flowing through space with velocity trails and particle acceleration effects.</p>
+                <button class="view-button">View Experiment</button>
+            </div>
+            
+            <div class="experiment-card" onclick="window.location.href='experiments/crystal-formation/index.html'">
+                <div class="experiment-preview"></div>
+                <h3>Crystal Formation Process</h3>
+                <p>Particles crystallizing into complex geometric structures with branching and growth patterns.</p>
+                <button class="view-button">View Experiment</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Animation Experiments | Built with Three.js | Optimized for mobile performance</p>
+        </div>
+    </div>
+</body>
+</html> 

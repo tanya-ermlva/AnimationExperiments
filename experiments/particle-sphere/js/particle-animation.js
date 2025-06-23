@@ -16,42 +16,73 @@ class ParticleAnimation {
         this.chaosFactors = []; // Store individual chaos factors for each particle
         this.chaosIntensity = 0.8; // Initial chaos intensity
         this.chaosDecayRate = 0.02; // How fast chaos decreases
+        this.isContextLost = false;
         
         this.init();
         this.setupDurationControl();
+        this.setupContextLossHandling();
         this.animate();
     }
     
     init() {
-        // Create scene
-        this.scene = new THREE.Scene();
+        try {
+            // Create scene
+            this.scene = new THREE.Scene();
+            
+            // Create camera with optimized settings for mobile
+            this.camera = new THREE.PerspectiveCamera(
+                75, 
+                400 / 900, 
+                0.1, 
+                1000
+            );
+            this.camera.position.z = 8;
+            
+            // Create renderer with mobile optimizations and context loss prevention
+            this.renderer = new THREE.WebGLRenderer({
+                canvas: document.getElementById('particle-canvas'),
+                antialias: false, // Disable antialiasing for performance
+                alpha: false,
+                powerPreference: "high-performance",
+                preserveDrawingBuffer: false, // Better performance
+                failIfMajorPerformanceCaveat: false // Allow fallback
+            });
+            this.renderer.setSize(400, 900);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for mobile
+            this.renderer.setClearColor(0x000000, 1);
+            
+            // Enable context loss handling
+            this.renderer.getContext().getExtension('WEBGL_lose_context');
+            
+            // Create particles
+            this.createParticles();
+            
+            // Remove ambient light to eliminate glow
+            // const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+            // this.scene.add(ambientLight);
+        } catch (error) {
+            console.error('Failed to initialize WebGL:', error);
+            this.showFallbackMessage();
+        }
+    }
+    
+    showFallbackMessage() {
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
         
-        // Create camera with optimized settings for mobile
-        this.camera = new THREE.PerspectiveCamera(
-            75, 
-            400 / 900, 
-            0.1, 
-            1000
-        );
-        this.camera.position.z = 8;
+        // Set canvas size
+        canvas.width = 400;
+        canvas.height = 900;
         
-        // Create renderer with mobile optimizations
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: document.getElementById('particle-canvas'),
-            antialias: false, // Disable antialiasing for performance
-            alpha: false,
-            powerPreference: "high-performance"
-        });
-        this.renderer.setSize(400, 900);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for mobile
-        this.renderer.setClearColor(0x000000, 1);
+        // Draw fallback message
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Create particles
-        this.createParticles();
-        
-        // Remove ambient light to eliminate glow
-        // const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
-        // this.scene.add(ambientLight);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('WebGL not available', canvas.width / 2, canvas.height / 2 - 20);
+        ctx.fillText('Please try refreshing the page', canvas.width / 2, canvas.height / 2 + 10);
     }
     
     setupDurationControl() {
@@ -78,6 +109,57 @@ class ParticleAnimation {
         
         // Initialize duration value display (60 seconds = 1 minute)
         durationValue.textContent = formatTime(60);
+    }
+    
+    setupContextLossHandling() {
+        const canvas = this.renderer.domElement;
+        
+        // Handle context lost
+        canvas.addEventListener('webglcontextlost', (event) => {
+            event.preventDefault();
+            console.log('WebGL context lost. Attempting to restore...');
+            this.isContextLost = true;
+            
+            // Stop the animation loop
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+                this.animationId = null;
+            }
+        }, false);
+        
+        // Handle context restored
+        canvas.addEventListener('webglcontextrestored', () => {
+            console.log('WebGL context restored. Reinitializing...');
+            this.isContextLost = false;
+            
+            // Recreate the scene and particles
+            this.recreateScene();
+            
+            // Restart the animation
+            this.animate();
+        }, false);
+    }
+    
+    recreateScene() {
+        // Clear existing scene
+        if (this.particleSystem) {
+            this.scene.remove(this.particleSystem);
+            if (this.particleSystem.geometry) {
+                this.particleSystem.geometry.dispose();
+            }
+            if (this.particleSystem.material) {
+                this.particleSystem.material.dispose();
+            }
+        }
+        
+        // Clear arrays
+        this.initialPositions = [];
+        this.targetPositions = [];
+        this.currentPositions = [];
+        this.chaosFactors = [];
+        
+        // Recreate particles
+        this.createParticles();
     }
     
     createParticles() {
@@ -182,6 +264,11 @@ class ParticleAnimation {
     }
     
     updateParticles() {
+        // Don't update if particle system doesn't exist
+        if (!this.particleSystem || !this.particleSystem.geometry) {
+            return;
+        }
+        
         const currentTime = Date.now();
         const elapsed = currentTime - this.startTime;
         const progress = Math.min(elapsed / this.gatherDuration, 1);
@@ -255,10 +342,34 @@ class ParticleAnimation {
     }
     
     animate() {
+        // Don't animate if context is lost or renderer doesn't exist
+        if (this.isContextLost || !this.renderer) {
+            return;
+        }
+        
         this.animationId = requestAnimationFrame(() => this.animate());
         
-        this.updateParticles();
-        this.renderer.render(this.scene, this.camera);
+        // Check if WebGL context is still valid before rendering
+        try {
+            if (this.renderer && !this.renderer.getContext().isContextLost()) {
+                this.updateParticles();
+                this.renderer.render(this.scene, this.camera);
+            } else {
+                // Context lost, stop animation
+                this.isContextLost = true;
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            }
+        } catch (error) {
+            console.error('Rendering error:', error);
+            this.isContextLost = true;
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+                this.animationId = null;
+            }
+        }
     }
     
     dispose() {

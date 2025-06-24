@@ -14,7 +14,7 @@
         body {
             margin: 0;
             padding: 0;
-            background: #000;
+            background: #141414;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -25,15 +25,38 @@
         
         #canvas-container {
             width: 400px;
-            height: 900px;
+            height: 840px;
             position: relative;
-            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 18px;
+            background: #000;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 4px solid #333;
+        }
+        
+        #canvas-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+            border-radius: 32px 32px 0 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        #canvas-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+            border-radius: 0 0 32px 32px;
+            pointer-events: none;
+            z-index: 1;
         }
         
         #back-button {
@@ -85,18 +108,27 @@
             margin-bottom: 5px;
         }
         
-        .coming-soon {
-            text-align: center;
-            color: #7669DD;
-            font-size: 24px;
-            font-weight: 600;
+        #lottie-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 26px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
         
-        .coming-soon::after {
-            content: '🔷';
-            display: block;
-            font-size: 48px;
-            margin-top: 20px;
+        #lottie-animation svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
@@ -107,10 +139,14 @@
         <h3>Geometric Pattern Evolution</h3>
         <p><strong>Particles:</strong> 2,500</p>
         <p><strong>Effect:</strong> Mathematical patterns</p>
+        <p><strong>Format:</strong> Lottie JSON</p>
     </div>
     
     <div id="canvas-container">
-        <div class="coming-soon">Coming Soon</div>
+        <div id="lottie-animation"></div>
     </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <script src="js/geometric-pattern-animation.js"></script>
 </body>
 </html> 

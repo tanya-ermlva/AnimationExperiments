@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Flow Experiment</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #111;
+      color: #fff;
+      font-family: 'Inter', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mobile-container {
+      width: 100vw;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #181818;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      padding: 16px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .video-wrapper {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      margin-top: 16px;
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 12px 0;
+      text-align: center;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-container">
+    <h1>Energy Flow</h1>
+    <div class="video-wrapper">
+      <video src="/Fields Heavy.mp4" autoplay loop muted playsinline controls></video>
+    </div>
+  </div>
+</body>
+</html> 
